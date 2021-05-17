@@ -1,8 +1,8 @@
-puts "Введите значение основания треугольника:"
-length = gets.chomp
-puts "Введите значение высоты треугольника:"
-height = gets.chomp
+puts 'Введите значение основания треугольника:'
+length = gets.chomp.to_i
+puts 'Введите значение высоты треугольника:'
+height = gets.chomp.to_i
 
-square = 0.5 * length.to_i * height.to_i
+square = 0.5 * length * height
 
 puts "Площадь треугольника равна: #{square}"
