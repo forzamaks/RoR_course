@@ -6,21 +6,19 @@ class Route
     @stations = []
   end
 
-  def add_stations(station)
+  def add_station(station)
     @stations << station
   end
 
-  def remove_stations(station)
+  def remove_station(station)
     @stations.map {|item| item != station }
   end
 
-  def show_all_route
-    # all_route = []
-    all_route = @stations
-    all_route.unshift(@start_station) unless all_route.include?(@start_station)
-    all_route.push(@finish_station) unless all_route.include?(@finish_station)
-    all_route.uniq
-    #return all_route
+  def get_all_routes
+    all_routes = @stations
+    all_routes.unshift(@start_station) unless all_route.include?(@start_station)
+    all_routes.push(@finish_station) unless all_route.include?(@finish_station)
+    all_routes.uniq
   end
 
   def set_train(train)
@@ -28,14 +26,14 @@ class Route
   end
 
   def change_station(train, type)
-    station_list = self.show_all_route
+    stations_list = get_all_routes
     new_station = []
-    station_list.each_with_index do |station, index|
+    stations_list.each_with_index do |station, index|
       if station.trains.include?(train)
         if type == 'next'
-          new_station = station_list[index + 1 > station_list.length - 1 ? station_list.length - 1 : index + 1]
+          new_station = stations_list[index + 1 > stations_list.length - 1 ? stations_list.length - 1 : index + 1]
         else
-          new_station = station_list[index - 1 < 0 ? 0 : index - 1]
+          new_station = stations_list[index - 1 < 0 ? 0 : index - 1]
         end
         puts new_station
       end
@@ -46,12 +44,12 @@ class Route
   end
 
   def show_stations_nearby(train)
-    station_list = self.show_all_route
-    station_list.each_with_index do |station, index|
+    stations_list = get_all_routes
+    stations_list.each_with_index do |station, index|
       if station.trains.include?(train)
-        puts "предыдущая станция: #{station_list[index - 1].name}" if index - 1 >= 0
+        puts "предыдущая станция: #{stations_list[index - 1].name}" if index - 1 >= 0
         puts "текущая станция: #{station.name}"
-        puts "следущая станция: #{station_list[index + 1].name}" if index + 1 < station_list.length 
+        puts "следущая станция: #{stations_list[index + 1].name}" if index + 1 < stations_list.length 
       end
     end
     

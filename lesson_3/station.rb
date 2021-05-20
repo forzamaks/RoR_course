@@ -11,7 +11,7 @@ class Station
   end
 
   def delete_train(train)
-    @trains = @trains.reject {|item| item.train_number == train.train_number}
+    @trains = @trains.reject {|item| item.number == train.number}
     return @trains
   end
 
