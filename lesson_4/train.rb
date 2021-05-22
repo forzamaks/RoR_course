@@ -43,8 +43,8 @@ class Train
 
   def delete_carriage(carriage)
     if speed.zero?
-      self.cars = self.cars.reject {|item| item.number == carriage.number}
+      self.cars = cars.reject {|item| item.number == carriage.number}
     end
-    return self.cars
+    cars
   end
 end

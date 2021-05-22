@@ -93,7 +93,6 @@ class Main
     end
     if has_route!(number).length.zero?
       puts 'Маршрут не найден'
-      return
     else 
       route = has_route!(number).first
       route.add_station(station)
@@ -108,14 +107,12 @@ class Main
 
     if has_station!(name).length.zero?
       puts 'Станция не найдена'
-      return
     else 
       station = stations.select{|item| item.name == name}
 
     end
     if has_route!(number).length.zero?
       puts 'Маршрут не найден'
-      return
     else 
       route = has_route!(number).first
       route.remove_station(station.first)
@@ -143,7 +140,6 @@ class Main
     number = gets.chomp
     if has_route!(number).length.zero?
       puts 'Маршрут не найден'
-      return
     else 
       route = has_route!(number).first
       route.get_all_routes
@@ -234,22 +230,22 @@ class Main
   def has_station!(name)
     has_station = []
     stations.select {|item| has_station << item if item.name == name}
-    return has_station
+    has_station
   end
   def has_carriage!(number, cars)
     has_carriage = []
     cars.select {|item| has_carriage << item if item.number == number}
-    return has_carriage
+    has_carriage
   end
   def has_route!(number)
     has_route = []
     has_route << routes[number] if routes[number]
-    return has_route
+    has_route
   end
   def has_train!(number)
     has_train = []
     has_train << trains[number] if trains[number]
-    return has_train
+    has_train
   end
 end
 

@@ -14,7 +14,7 @@ class Route
 
   def remove_station(station)
     @stations = @stations.reject {|item| item.name == station.name }
-    return @stations
+    @stations
   end
 
   def get_all_routes
@@ -22,7 +22,7 @@ class Route
     all_routes.unshift(@start_station) unless all_routes.include?(@start_station)
     all_routes.push(@finish_station) unless all_routes.include?(@finish_station)
     all_routes.uniq
-    return all_routes
+    all_routes
   end
 
   def set_train(train)
