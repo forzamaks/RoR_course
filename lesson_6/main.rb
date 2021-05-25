@@ -52,6 +52,7 @@ class Main
 
       train = PassengerTrain.new(number, 'passenger') if input == 1
       train = CargoTrain.new(number, 'cargo') if input == 2
+      puts train.valid?
       if train.valid?
         puts "создан поезд #{number}"
       else

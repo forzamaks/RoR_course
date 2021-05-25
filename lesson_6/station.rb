@@ -52,7 +52,7 @@ class Station
     errors = []
     errors << "Название станции не может быть пустым" if name.length.zero?
     errors << "Название станции должно иметь минимум 3 символа" if name.length < 3
-    raise errors.join('. ') if errors.present?
+    raise errors.join('. ') unless errors.empty?
   end
 
 end

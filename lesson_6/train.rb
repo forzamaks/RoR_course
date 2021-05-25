@@ -14,13 +14,14 @@ class Train
   end
 
   def initialize(number, type)
+    
     @number = number
     @type = type
     @cars = []
     @speed = 0
     @@trains[number] = self
     register_instance(self.class)
-
+    
     begin
       validate!
     rescue RuntimeError => e
@@ -79,8 +80,9 @@ class Train
   def validate!
     errors = []
     errors << "Номер поезда не может быть пустым" if number.length.zero?
-    errors << "Номер поезда должен иметь минимум 6 символов" if number.length < 6
-    errors << "Неверный формат номера поезда " if number !~ NUMER_TMP
-    raise errors.join('. ') if errors.present?
+    errors << "Номер поезда должен иметь минимум 5 символов" if number.length < 5
+    errors << "Неверный формат номера поезда" if number !~ NUMER_TMP
+    
+    raise errors.join('. ') unless errors.empty?
   end
 end

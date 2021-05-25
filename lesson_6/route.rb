@@ -81,6 +81,6 @@ class Route
     errors << "Название станции начала маршрута не может быть пустым и должно иметь минимум 3 символа" if @start_station.name.length.zero? && @start_station.name.length < 3
     errors << "Название станции конца маршрута не может быть пустым и должно иметь минимум 3 символа" if @finish_station.name.length.zero? && @finish_station.name.length < 3
     errors << "Номер маршрута не может быть пустым" if @number.length.zero?
-    raise errors.join('. ') if errors.present?
+    raise errors.join('. ') unless errors.empty?
   end
 end
