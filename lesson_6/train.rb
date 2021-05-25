@@ -77,8 +77,10 @@ class Train
   protected
 
   def validate!
-    raise "Номер поезда не может быть пустым" if number.length.zero?
-    raise "Номер поезда должен иметь минимум 6 символов" if number.length < 6
-    raise "Неверный формат номера поезда " if number !~ NUMER_TMP
+    errors = []
+    errors << "Номер поезда не может быть пустым" if number.length.zero?
+    errors << "Номер поезда должен иметь минимум 6 символов" if number.length < 6
+    errors << "Неверный формат номера поезда " if number !~ NUMER_TMP
+    raise errors.join('. ') if errors.present?
   end
 end
