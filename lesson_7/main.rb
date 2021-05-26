@@ -50,8 +50,8 @@ class Main
       input = gets.to_i
       break unless input == 1 || input == 2
 
-      train = PassengerTrain.new(number, 'passenger') if input == 1
-      train = CargoTrain.new(number, 'cargo') if input == 2
+      train = PassengerTrain.new(number, :passenger) if input == 1
+      train = CargoTrain.new(number, :cargo) if input == 2
       puts train.valid?
       if train.valid?
         puts "создан поезд #{number}"
@@ -165,11 +165,11 @@ class Main
       train = Train.find(number_train)
 
       puts 'Укажите колличество мест в вагоне' if train.type == 'passenger'
-      puts 'Укажите объем вагона' if train.type == 'cargo'
+      puts 'Укажите объем вагона' if train.type == :cargo
       quantity = gets.chomp
 
-      carriage = CargoCarriage.new(number_carriage, quantity) if train.type == 'cargo'
-      carriage = PassengerCarriage.new(number_carriage, quantity) if train.type == 'passenger'
+      carriage = CargoCarriage.new(number_carriage, quantity) if train.type == :cargo
+      carriage = PassengerCarriage.new(number_carriage, quantity) if train.type == :passenger
       
       train.add_carriage(carriage)
       puts 'Вагон добавлен к поезду'
@@ -247,8 +247,8 @@ class Main
       train.show_carriage_in_train do |item|
         puts "Номер вагона: #{item.number}"
         puts "Тип вагона: #{item.type}"
-        puts "Свободных мест: #{item.show_free_places}, Занятых мест: #{item.show_occupied_places}" if item.type == 'passenger'
-        puts "Свободных объем: #{item.show_availible_volume}, Занятый объем: #{item.show_occupied_volume}" if item.type == 'cargo'
+        puts "Свободных мест: #{item.free_places}, Занятых мест: #{item.occupied_places}" if item.type == :passenger
+        puts "Свободных объем: #{item.availible_volume}, Занятый объем: #{item.occupied_volume}" if item.type == :cargo
         puts '------'
       end
     end

@@ -3,7 +3,7 @@ class PassengerCarriage < Carriage
   attr_reader :places
   def initialize(number, places)
     super(number)
-    @type = 'passenger'
+    @type = :passenger
     @places = places.to_i
     @occupied_places = 0
   end
@@ -12,12 +12,7 @@ class PassengerCarriage < Carriage
     self.occupied_places += 1
   end
 
-  def show_free_places
+  def free_places
     places - occupied_places
   end
-
-  def show_occupied_places
-    self.occupied_places
-  end
-
 end 

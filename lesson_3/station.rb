@@ -12,11 +12,11 @@ class Station
 
   def delete_train(train)
     @trains = @trains.reject {|item| item.number == train.number}
-    return @trains
+    @trains
   end
 
   def all_trains_by_type(type)
     trains_by_type = @trains.map {|train| train.type == type}
-    return trains_by_type
+    trains_by_type
   end
 end

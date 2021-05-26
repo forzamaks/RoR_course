@@ -4,7 +4,7 @@ class CargoCarriage < Carriage
 
   def initialize(number, volume)
     super(number)
-    @type = 'cargo'
+    @type = :cargo
     @volume = volume
     @occupied_volume = 0
   end
@@ -13,11 +13,7 @@ class CargoCarriage < Carriage
     self.volume = volume
   end
 
-  def show_occupied_volume
-    self.occupied_volume
-  end
-
-  def show_availible_volume
+  def availible_volume
     volume - occupied_volume
   end
 end
