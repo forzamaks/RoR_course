@@ -27,17 +27,16 @@ class Main
     puts NAME_STATION
     name = gets.chomp
 
-    if has_station!(name).length.zero?
+    if has_station?(name)
+      puts "станция уже существует"
+    else
       station = Station.new(name)
       if station.valid?
         puts "станция создана" 
       else
         create_station
       end
-    else
-      puts "станция уже существует"
     end
-    
   end
 
   def create_train
@@ -70,15 +69,15 @@ class Main
     finish_route = gets.chomp
     puts NUMBER_ROUTE
     number = gets.chomp
-    if has_station!(start_route).length.zero?
-      start_station = Station.new(start_route)
-    else 
+    if has_station?(start_route)
       start_station = Station.all.select{|item| item.name == start_route}
-    end
-    if has_station!(finish_route).length.zero?
-      finsih_station = Station.new(finish_route)
     else 
+      start_station = Station.new(start_route)
+    end
+    if has_station?(finish_route)
       finsih_station = Station.all.select{|item| item.name == finish_route}
+    else 
+      finsih_station = Station.new(finish_route)
     end
     route = Route.new(start_station, finsih_station, number)
     routes[number] = route
@@ -92,17 +91,17 @@ class Main
     puts NUMBER_ROUTE
     number = gets.chomp
 
-    if has_station!(name).length.zero?
-      station = Station.new(name)
-    else 
+    if has_station?(name)
       station = Station.all.select{|item| item.name == name}
-    end
-    if has_route!(number).length.zero?
-      puts 'Маршрут не найден'
     else 
-      route = has_route!(number).first
+      station = Station.new(name)
+    end
+    if has_route?(number)
+      route = has_route(number).first
       route.add_station(station)
       puts 'Станция добавлена на маршрут'
+    else 
+      puts 'Маршрут не найден'
     end
   end
   def remove_station_on_route
@@ -111,18 +110,17 @@ class Main
     puts NUMBER_ROUTE
     number = gets.chomp
 
-    if has_station!(name).length.zero?
+    unless has_station?(name)
       puts 'Станция не найдена'
     else 
       station = Station.all.select{|item| item.name == name}
-
     end
-    if has_route!(number).length.zero?
-      puts 'Маршрут не найден'
-    else 
-      route = has_route!(number).first
+    if has_route?(number)
+      route = routes[number]
       route.remove_station(station.first)
       puts 'Станция удалена с маршрута'
+    else 
+      puts 'Маршрут не найден'
     end
   end
 
@@ -132,9 +130,9 @@ class Main
     puts NUMBER_TRAIN
     number_train = gets.chomp
 
-    unless has_route!(number_route).length.zero? && Train.find(number_train).nil?
+    if has_route?(number_route) && Train.find(number_train).present?
       train = Train.find(number_train)
-      route = has_route!(number_route).first
+      route = routes[number_route]
       train.train_add_route(route)
     else
       puts 'Не верно указан номер поезда или номер маршрута'
@@ -144,13 +142,13 @@ class Main
   def show_stations_list_on_route
     puts NUMBER_ROUTE
     number = gets.chomp
-    if has_route!(number).length.zero?
-      puts 'Маршрут не найден'
-    else 
-      route = has_route!(number).first
+    if has_route?(number)
+      route = routes[number]
       route.get_all_routes
       puts "Станции на маршруте:"
       route.stations.map {|station| puts station.name}
+    else 
+      puts 'Маршрут не найден'
     end
   end
 
@@ -185,9 +183,9 @@ class Main
 
     unless Train.find(number_train)
       train = Train.find(number_train)
-      unless has_carriage!(number_carriage, train.cars).length.zero?
-
-        train.delete_carriage(has_carriage!(number_carriage, train.cars).first)
+      if has_carriage?(number_carriage, train.cars)
+        carriage = cars.select{|item| item.name == name}
+        train.delete_carriage(carriage)
         puts 'Вагон удален'
       else 
         puts 'Вагон не найден'
@@ -201,8 +199,8 @@ class Main
     puts NAME_STATION
     name = gets.chomp
 
-    unless has_station!(name).length.zero?
-      station = has_station!(name).first
+    if has_station?(name)
+      station = Station.all.select{|item| item.name == name}
       puts 'Список поездов на станции'
       station.trains.map {|train| puts train.number}
     else
@@ -221,11 +219,10 @@ class Main
       input = gets.to_i
       break unless input == 1 || input == 2
 
-      unless has_route!(number_route).length.zero? && Train.find(number_train)
+      if has_route?(number_route) && Train.find(number_train).present?
         train = Train.find(number_train)
-        route = has_route!(number_route).first
+        route = routes[number_route]
 
-        
         train.change_to_next_station(route) if input == 1
         train.change_to_prew_station(route) if input == 2
         puts 'Поезд перемещен'
@@ -260,8 +257,8 @@ class Main
     name = gets.chomp
 
 
-    unless has_station!(name).length.zero?
-      station = has_station!(name).first
+    if has_station?(name)
+      station = Station.all.select{|item| item.name == name}
       station.show_trains_on_station do |train|
         puts "Номер поезда: #{train.number}"
         puts "Тип поездп: #{train.type}"
@@ -275,20 +272,24 @@ class Main
   end
   private
   # данные методы вынес в раздел private так как использую их внутри public методов как  вспомогательные методы класса
-  def has_station!(name)
+
+  def has_station?(name)
     has_station = []
     Station.all.select {|item| has_station << item if item.name == name}
-    has_station
+    false if has_station.length == 0
+    true if has_station.length > 0
   end
-  def has_carriage!(number, cars)
+  def has_carriage?(number, cars)
     has_carriage = []
     cars.select {|item| has_carriage << item if item.number == number}
-    has_carriage
+    false if has_carriage.length == 0
+    true if has_carriage.length > 0
   end
-  def has_route!(number)
+  def has_route?(number)
     has_route = []
     has_route << routes[number] if routes[number]
-    has_route
+    false if has_route.length == 0
+    true if has_route.length > 0
   end
   
 end
